@@ -10,25 +10,66 @@ namespace ReceptsAPI.Repository
         {
             _context = context;
         }
-        public bool Create(Comment item)
+        public int? Create(Comment item)
         {
             _context.Comments.Add(item);
 
-            return _context.SaveChanges() > 0;
+            try
+            {
+                _context.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+
+            return item.Id;
         }
 
-        public bool Delete(Comment item)
+        public bool Delete(int id)
         {
-            _context.Comments.Remove(item);
+            var comment = _context.Comments.FirstOrDefault(x => x.Id == id);
 
-            return _context.SaveChanges() > 0;
+            if (comment != null)
+                return false;
+
+            _context.Comments.Remove(comment);
+
+            try
+            {
+                _context.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+            return true;
         }
+
+        public List<Comment> GetAll()
+        {
+            return _context.Comments.ToList();
+        }
+
+        public Comment? GetById(int Id)
+        {
+            return _context.Comments.Where(comment => comment.Id == Id).FirstOrDefault();
+        }
+
 
         public bool Update(Comment item)
         {
             _context.Comments.Update(item);
 
-            return _context.SaveChanges() > 0;
+            try
+            {
+                _context.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+            return true;
         }
     }
 }

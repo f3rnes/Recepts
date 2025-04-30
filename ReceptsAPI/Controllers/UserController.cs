@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using ReceptsAPI.Entity;
 using ReceptsAPI.Repository;
 using System.Data;
@@ -9,40 +10,28 @@ namespace ReceptsAPI.Controllers
     [Route("[controller]")]
 
 
-    public partial class UserController : ControllerBase
+    public  class UserController : ControllerBase
     {
         private readonly IUserRepository _repository;
 
-        public record CreateUserRequest(string FirstName, string Lastname, string Role, string Login, string Password);
-        public record DeleteUserRequest(int Id);
+        public record CreateUserRequest(string FirstName, string Lastname, string Login, string Password);
 
         public UserController(IUserRepository userRepository)
         {
             _repository = userRepository;
         }
 
-        [HttpGet]
-        public ActionResult Create([FromBody] CreateUserRequest request)
-        {
-
-            bool checkbool = _repository.Create(new User { FirstName = request.FirstName, LastName = request.Lastname, Role = request.Role, Login = request.Login, Password = request.Password });
-            if (checkbool == true)
-            {
-                return Ok();
-            }
-            else
-            {
-                return BadRequest();
-            }
-        }
-
+        
         [HttpPatch]
+        [Authorize]
         public ActionResult Update([FromRoute] CreateUserRequest request)
         {
-            bool checkbool = _repository.Update(new User {FirstName = request.FirstName, LastName = request.Lastname, Role = request.Role, Login = request.Login, Password = request.Password });
+            var userId = int.Parse(HttpContext.User.Identity.Name);
+
+            bool checkbool = _repository.Update(new User {Id = userId, FirstName = request.FirstName, LastName = request.Lastname, Login = request.Login, Password = request.Password });
             if (checkbool == true)
             {
-                return Ok();
+                return NoContent();
             }
             else
             {
@@ -50,14 +39,15 @@ namespace ReceptsAPI.Controllers
             }
 
         }
-        [HttpDelete]
 
-        public ActionResult DeleteTodo([FromRoute] DeleteUserRequest request)
+        [HttpDelete("{id:int}")]
+        [Authorize("Admin")]
+        public ActionResult Delete([FromRoute] int id)
         {
-            bool checkbool = _repository.Delete(request.Id);
+            bool checkbool = _repository.Delete(id);
             if (checkbool == true)
             {
-                return Ok();
+                return NoContent();
 
             }
             else

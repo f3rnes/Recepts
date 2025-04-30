@@ -10,33 +10,50 @@ namespace ReceptsAPI.Repository
             _context = context;
         }
 
-        public bool Create(User item)
+        public int? Create(User item)
         {
             _context.Users.Add(item);
 
-            return _context.SaveChanges() > 0;
+            try
+            {
+                _context.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+
+            return item.Id;
         }
 
-        public bool Delete(int Id)
+        public bool Delete(int id)
         {
-            User? user = _context.Users.Where(user => user.Id == Id).FirstOrDefault();
+            var user = _context.Users.FirstOrDefault(x => x.Id == id);
+
+            if(user != null)
+                return false;
 
             _context.Users.Remove(user);
 
-            return _context.SaveChanges() > 0;
+            try
+            {
+                _context.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+            return true;
         }
 
-        public IEnumerable<User> GetAll()
+        public List<User> GetAll()
         {
             return _context.Users.ToList();
         }
 
-        public User GetById(int Id)
+        public User? GetById(int Id)
         {
-          return   _context.Users.Where(user => user.Id == Id).FirstOrDefault();
-
-
-            
+            return _context.Users.Where(user => user.Id == Id).FirstOrDefault();
         }
 
         public bool SetRefreshToken(string refreshToken, int userId)
@@ -48,19 +65,31 @@ namespace ReceptsAPI.Repository
 
             user.RefreshToken = refreshToken;
 
-            return _context.SaveChanges() > 0;
+            try
+            {
+                _context.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+            return true;
 
         }
-
-    
-    
 
         public bool Update(User item)
         {
             _context.Users.Update(item);
 
-            return _context.SaveChanges() > 0;
+            try
+            {
+                _context.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+            return true;
         }
-     
     }
 }

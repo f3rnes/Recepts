@@ -2,13 +2,8 @@
 
 namespace ReceptsAPI.Repository
 {
-    public interface ICommentRepository
+    public interface ICommentRepository : IRepository<Comment>
     {
-        public bool Create(Comment item);
-        public bool Update(Comment item);
-        public bool Delete(Comment item);
-
-
 
     }
 }

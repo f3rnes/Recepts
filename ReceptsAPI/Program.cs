@@ -41,6 +41,10 @@ builder.Services.AddAuthorization();
 builder.Services.AddControllers();
 
 builder.Services.AddTransient<IUserRepository, UserRepository>();
+builder.Services.AddTransient<IReceptRepository, ReceptRepository>();
+builder.Services.AddTransient<ICommentRepository, CommentRepository>();
+builder.Services.AddTransient<IStageRepository, StageRepository>();
+
 
 
 var app = builder.Build();

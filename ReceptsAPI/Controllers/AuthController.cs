@@ -66,7 +66,7 @@ namespace ReceptsAPI.Controllers
                     Role = "user"
                 };
 
-                if (_userRepository.Create(newUser) == false)
+                if (_userRepository.Create(newUser) == null)
                     return BadRequest("User cannot be created");
 
                 string refreshToken = Guid.NewGuid().ToString();
@@ -102,20 +102,6 @@ namespace ReceptsAPI.Controllers
             public ActionResult<List<User>> GetAllUsers()
             {
                 return _userRepository.GetAll().ToList();
-            }
-
-            [Authorize(Roles = "admin")]
-            [HttpDelete("{userId:int}")]
-            public ActionResult DeleteUser([FromRoute] int userId)
-            {
-                if (_userRepository.Delete(userId))
-                {
-                    return NoContent();
-                }
-                else
-                {
-                    return BadRequest();
-                }
             }
         }
     }

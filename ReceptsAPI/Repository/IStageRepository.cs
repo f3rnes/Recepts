@@ -2,13 +2,9 @@
 
 namespace ReceptsAPI.Repository
 {
-    public interface IStageRepository
+    public interface IStageRepository : IRepository<Stage>
     {
 
-        public bool Create(Stage item);
-
-        public bool Update(Stage item);
-
-        public bool Delete(Stage item);
+        
     }
 }
