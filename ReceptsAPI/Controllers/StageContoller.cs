@@ -1,6 +1,49 @@
-﻿namespace ReceptsAPI.Controllers
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using ReceptsAPI.Contacts.CreateStages;
+using ReceptsAPI.Entity;
+using ReceptsAPI.Repository;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using System.Data;
+
+namespace ReceptsAPI.Controllers
 {
-    public class StageContoller
-    {
+
+        [ApiController]
+        [Route("[controller]")]
+        public class StageController : ControllerBase
+        {
+            private readonly IStageRepository _repository;
+            public StageController(IStageRepository stageRepository)
+            {
+                _repository = stageRepository;
+            }
+
+
+            
+
+            [HttpPost]
+            [Authorize]
+            public ActionResult<int> CreateStages([FromRoute] CreateStagesRequest request)
+            {
+
+
+                int? check = _repository.Create(new Stage { ReceptId = request.ReceptId, StageNumber = request.StageNumber, Photo = request.Photo, Description = request.Description });
+
+
+                if (check == null)
+                {
+                    return BadRequest();
+                }
+                else
+                {
+                    return check;
+                }
+
+
+
+            }
+        }
     }
-}
+

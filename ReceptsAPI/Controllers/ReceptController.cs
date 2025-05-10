@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using ReceptsAPI.Contacts.CreateRecepts;
 using ReceptsAPI.Contacts.GetRecepts;
 using ReceptsAPI.Entity;
 using ReceptsAPI.Repository;
@@ -26,21 +27,29 @@ namespace ReceptsAPI.Controllers
 
         [HttpPost]
         [Authorize]
-        public int? CreateRecepts([FromRoute] CreateReceptsResponse request)
+        public ActionResult<int> CreateRecepts([FromBody] CreateReceptsRequest request)
         {
+            string? userName = HttpContext.User.Identity.Name;
 
-            bool checkbool = _repository.Create().Select(item => new CreateReceptsResponse(item.Id, item.Name, item.Description, item.Photo, item.Weight, item.Ingredients, $"{item.Admin.FirstName} {item.Admin.LastName}");
-
-            if (checkbool == true)
+            if(int.TryParse(userName, out int userId) == false)
             {
-                return true ;
-            }
-            if (checkbool == false) 
-            {
-                return false;
+                return BadRequest();
             }
 
+            int? check = _repository.Create(new Recept { AdminId = userId, Name = request.Name, Description = request.Description, Photo = request.Photo, Weight = request.Weight, Ingredients = request.Ingredients });
+           
+           
+            if (check == null)
+            {
+                return BadRequest();
+            }
+            else
+            {
+                return check;
+            }
 
 
-    }
+
+        }
+    } 
 }

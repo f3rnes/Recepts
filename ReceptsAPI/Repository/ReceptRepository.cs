@@ -19,7 +19,8 @@ namespace ReceptsAPI.Repository
             }
             catch (Exception ex)
             {
-                return null;
+                throw;
+                //return null;
             }
 
             return item.Id;
