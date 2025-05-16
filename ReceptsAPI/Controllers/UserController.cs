@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using ReceptsAPI.Entity;
 using ReceptsAPI.Repository;
 using System.Data;
+using ReceptsAPI.Contacts.UsersContacts.CreateUsers;
+
 
 namespace ReceptsAPI.Controllers
 {
@@ -14,7 +16,6 @@ namespace ReceptsAPI.Controllers
     {
         private readonly IUserRepository _repository;
 
-        public record CreateUserRequest(string FirstName, string Lastname, string Login, string Password);
 
         public UserController(IUserRepository userRepository)
         {
@@ -40,8 +41,8 @@ namespace ReceptsAPI.Controllers
 
         }
 
-        [HttpDelete("{id:int}")]
-        [Authorize("Admin")]
+            [HttpDelete("{id:int}")]
+            [Authorize("Admin")]
         public ActionResult Delete([FromRoute] int id)
         {
             bool checkbool = _repository.Delete(id);
