@@ -1,6 +1,4 @@
 ﻿namespace ReceptsAPI.Contacts.ReceptsContacts.UpdateRecepts
 {
-    public class UpdateReceptsRequest
-    {
-    }
+    record UpdateReceptsRequest(string Name, string Description, string? Photo, float Weight, string Ingredients);
 }
