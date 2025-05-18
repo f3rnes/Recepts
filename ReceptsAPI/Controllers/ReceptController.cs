@@ -3,12 +3,12 @@ using Microsoft.AspNetCore.Mvc;
 using ReceptsAPI.Contacts.ReceptsContacts.CreateRecepts;
 using ReceptsAPI.Contacts.ReceptsContacts.GetRecepts;
 using ReceptsAPI.Entity;
-using ReceptsAPI.Repository;
 using System.Data;
 using ReceptsAPI.Contacts.ReceptsContacts.DeleteRecepts;
 using Microsoft.AspNetCore.Mvc.Diagnostics;
 using ReceptsAPI.Contacts.ReceptsContacts.GetOneRecepts;
 using ReceptsAPI.Contacts.ReceptsContacts.UpdateRecepts;
+using ReceptsAPI.Repository.Interface;
 
 
 
@@ -33,7 +33,7 @@ namespace ReceptsAPI.Controllers
         }
 
         [HttpPost]
-        [Authorize]
+        [Authorize("Admin")]
         public ActionResult<int> CreateRecepts([FromBody] CreateReceptsRequest request)
         {
             string? userName = HttpContext.User.Identity.Name;
@@ -62,30 +62,45 @@ namespace ReceptsAPI.Controllers
         [Authorize("Admin")]
         public ActionResult<bool> DeleteRecepts([FromBody] DeleteReceptsRequest request)
         {
-            // взять айди пользователя
+            string? userName = HttpContext.User.Identity.Name;
 
-            bool checkbool = _repository.Delete();
+            if (int.TryParse(userName, out int userId) == false)
+            {
+                return BadRequest();
+            }
+
+            bool checkbool = _repository.Delete(userId);
             if (checkbool == false)
             {
                 return BadRequest();
             }
-            if (checkbool == true)
+            else 
             {
-                return Ok();
+                return Ok(true);
+
             }
+
 
         }
         [HttpGet] 
-        public Recept<GetOneReceptsResponse> GetOneRecepts([FromBody] GetOneReceptsResponse request)
+        public ActionResult<Recept> GetOneRecepts()
         {
-            //dpznm fqlb
-            return _repository.GetById();
+            string? userName = HttpContext.User.Identity.Name;
 
+            if (int.TryParse(userName, out int userId) == false)
+            {
+                return BadRequest();
+            }
+            return _repository.GetById(userId);
+            //почему то нихуя не проверяем
         }
+
+
         [HttpPatch]
-        public ActionResult<bool> UpdateRecepts([FromBody] GetOneReceptsResponse request)
+        [Authorize("Admin")]
+        public ActionResult<bool> UpdateRecepts([FromBody] UpdateReceptsRequest request)
         {
-            
+           
 
             bool boolcheck = _repository.Update(new Recept { Name = request.Name, Description = request.Description, Photo = request.Photo, Weight = request.Weight, Ingredients = request.Ingredients });
 
@@ -96,7 +111,7 @@ namespace ReceptsAPI.Controllers
             }
             else
             {
-                return Ok(); 
+                return Ok(true); 
             }
            
 

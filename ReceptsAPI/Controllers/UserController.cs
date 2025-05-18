@@ -4,6 +4,14 @@ using ReceptsAPI.Entity;
 using System.Data;
 using ReceptsAPI.Contacts.UsersContacts.CreateUsers;
 using ReceptsAPI.Repository.Interface;
+using ReceptsAPI.Contacts.UsersContancts.DeleteUsers;
+using ReceptsAPI.Contacts.ReceptsContacts.CreateRecepts;
+using ReceptsAPI.Contacts.UsersContancts.CreateUsers;
+using ReceptsAPI.Contacts.ReceptsContacts.GetRecepts;
+using ReceptsAPI.Contacts.UsersContancts.GetUsers;
+using ReceptsAPI.Contacts.UsersContancts.GetOneUser;
+
+
 
 
 namespace ReceptsAPI.Controllers
@@ -12,7 +20,7 @@ namespace ReceptsAPI.Controllers
     [Route("[controller]")]
 
 
-    public  class UserController : ControllerBase
+    public class UserController : ControllerBase
     {
         private readonly IUserRepository _repository;
 
@@ -22,14 +30,18 @@ namespace ReceptsAPI.Controllers
             _repository = userRepository;
         }
 
-        
+
         [HttpPatch]
         [Authorize]
-        public ActionResult Update([FromRoute] CreateUserRequest request)
+        public ActionResult Update([FromBody] UpdateUserRequest request)
         {
-            var userId = int.Parse(HttpContext.User.Identity.Name);
+            string? userName = HttpContext.User.Identity.Name;
 
-            bool checkbool = _repository.Update(new User {Id = userId, FirstName = request.FirstName, LastName = request.Lastname, Login = request.Login, Password = request.Password });
+            if (int.TryParse(userName, out int userId) == false)
+            {
+                return BadRequest();
+            }
+            bool checkbool = _repository.Update(new User { Id = userId, FirstName = request.FirstName, LastName = request.Lastname, Login = request.Login, Password = request.Password });
             if (checkbool == true)
             {
                 return NoContent();
@@ -41,22 +53,68 @@ namespace ReceptsAPI.Controllers
 
         }
 
-            [HttpDelete("{id:int}")]
-            [Authorize("Admin")]
-        public ActionResult Delete([FromRoute] int id)
+        [HttpDelete]
+        [Authorize("Admin")]
+        public ActionResult Delete([FromBody] DeleteUserRequest request)
         {
-            bool checkbool = _repository.Delete(id);
-            if (checkbool == true)
-            {
-                return NoContent();
+            string? userName = HttpContext.User.Identity.Name;
 
+            if (int.TryParse(userName, out int userId) == false)
+            {
+                return BadRequest();
+            }
+            bool checkbool = _repository.Delete(userId);
+            if (checkbool == false)
+            {
+                return BadRequest();
             }
             else
             {
-                return BadRequest();
+                return Ok(true);
 
             }
         }
+        [HttpPost]
+        [Authorize("Admin")]
+        public ActionResult<int> CreateUsers([FromBody] CreateUsersRequest request)
+        {
+            string? userName = HttpContext.User.Identity.Name;
 
+            if (int.TryParse(userName, out int userId) == false)
+            {
+                return BadRequest();
+            }
+
+            int? check = _repository.Create(new User { Id = userId, FirstName = request.FirstName, LastName = request.LastName, PFP = request.PFP, Role = request.Role, Login = request.Login, Password = request.Password });
+
+
+            if (check == null)
+            {
+                return BadRequest();
+            }
+            else
+            {
+                return check;
+            }
+
+        }
+
+        [HttpGet]
+        public List<GetUsersResponse> GetUsers()
+        {
+            return _repository.GetAll().Select(item => new GetUsersResponse(item.Id, item.FirstName, item.LastName, item.Role)).ToList();
+        }
+        [HttpGet]
+        public ActionResult<User> GetOneUsers()
+        {
+            string? userName = HttpContext.User.Identity.Name;
+
+            if (int.TryParse(userName, out int userId) == false)
+            {
+                return BadRequest();
+            }
+            return _repository.GetById(userId);
+            
+        }
     }
 }
