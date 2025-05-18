@@ -1,4 +1,5 @@
-﻿using ReceptsAPI.Entity;
+﻿using Microsoft.AspNetCore.Authorization;
+using ReceptsAPI.Entity;
 using ReceptsAPI.Repository.Interface;
 
 namespace ReceptsAPI.Repository.Repositories
@@ -11,7 +12,7 @@ namespace ReceptsAPI.Repository.Repositories
         {
             _context = context;
         }
-        public int? Create(Comment item)
+        public int? Create(Comment item)//
         {
             _context.Comments.Add(item);
 
@@ -46,19 +47,40 @@ namespace ReceptsAPI.Repository.Repositories
             }
             return true;
         }
+        
+        public bool DeleteUser(int id)
+        {
+     
+            var comment = _context.Comments.FirstOrDefault(x => x.Id == id );
 
-        public List<Comment> GetAll()
+            if (comment != null)
+                return false;
+
+            _context.Comments.Remove(comment);
+
+            try
+            {
+                _context.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+            return true;
+        }
+
+        public List<Comment> GetAll()//
         {
             return _context.Comments.ToList();
         }
 
-        public Comment? GetById(int Id)
+        public Comment? GetById(int Id)//
         {
             return _context.Comments.Where(comment => comment.Id == Id).FirstOrDefault();
         }
 
 
-        public bool Update(Comment item)
+        public bool Update(Comment item)//
         {
             _context.Comments.Update(item);
 

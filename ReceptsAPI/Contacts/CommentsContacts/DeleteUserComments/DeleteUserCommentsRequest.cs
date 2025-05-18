@@ -1,5 +1,5 @@
 ﻿namespace ReceptsAPI.Contacts.CommentsContacts.DeleteUserComments
 {
-    public record DeleteUserCommentsRequest(int Id);
+    public record DeleteUserCommentsRequest(int UserId);
    
 }

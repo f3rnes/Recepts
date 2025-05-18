@@ -100,12 +100,17 @@ namespace ReceptsAPI.Controllers
         public ActionResult<bool> DeleteComments([FromBody] DeleteCommentsRequest request)
         {
             string? userName = HttpContext.User.Identity.Name;
+            
 
             if (int.TryParse(userName, out int userId) == false)
             {
                 return BadRequest();
             }
+            if (userId != userId && userId != request.Id) // схуяли нет юзер айди их реквеста, по моему написана хуйня
+            {
+                return BadRequest();
 
+            }
             bool checkbool = _repository.Delete(userId);
             if (checkbool == false)
             {
@@ -129,8 +134,9 @@ namespace ReceptsAPI.Controllers
             {
                 return BadRequest();
             }
+            
 
-            bool checkbool = _repository.Delete(userId);
+            bool checkbool = _repository.DeleteUser(userId);
             if (checkbool == false)
             {
                 return BadRequest();
