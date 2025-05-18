@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using ReceptsAPI.AUTH;
 using ReceptsAPI.Entity;
-using ReceptsAPI.Repository;
+using ReceptsAPI.Repository.Interface;
 using System.ComponentModel.DataAnnotations;
 
 namespace ReceptsAPI.Controllers

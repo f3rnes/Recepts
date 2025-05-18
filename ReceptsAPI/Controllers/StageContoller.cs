@@ -1,11 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ReceptsAPI.Entity;
-using ReceptsAPI.Repository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Data;
 using ReceptsAPI.Contacts.StagesContacts.CreateStages;
+using ReceptsAPI.Repository.Interface;
 
 namespace ReceptsAPI.Controllers
 {

@@ -6,7 +6,8 @@ using ReceptsAPI;
 using Microsoft.EntityFrameworkCore;
 using ReceptsAPI.Entity;
 using ReceptsAPI.AUTH;
-using ReceptsAPI.Repository;
+using ReceptsAPI.Repository.Repositories;
+using ReceptsAPI.Repository.Interface;
 
 var builder = WebApplication.CreateBuilder(args);
 

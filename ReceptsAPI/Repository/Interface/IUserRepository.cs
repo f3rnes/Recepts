@@ -1,6 +1,6 @@
 ﻿using ReceptsAPI.Entity;
 
-namespace ReceptsAPI.Repository
+namespace ReceptsAPI.Repository.Interface
 {
     public interface IUserRepository : IRepository<User>
     {

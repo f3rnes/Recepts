@@ -1,17 +1,19 @@
 ﻿using ReceptsAPI.Entity;
+using ReceptsAPI.Repository.Interface;
 
-namespace ReceptsAPI.Repository
+namespace ReceptsAPI.Repository.Repositories
 {
-    public class ReceptRepository : IReceptRepository
+    public class StageRepository : IStageRepository
     {
         private ApplicationContext _context;
-        public ReceptRepository(ApplicationContext context)
+        public StageRepository(ApplicationContext context)
         {
             _context = context;
         }
-       public int? Create(Recept item)
+
+        public int? Create(Stage item)
         {
-            _context.Recepts.Add(item);
+            _context.Stages.Add(item);
 
             try
             {
@@ -19,8 +21,7 @@ namespace ReceptsAPI.Repository
             }
             catch (Exception ex)
             {
-                throw;
-                //return null;
+                return null;
             }
 
             return item.Id;
@@ -28,12 +29,12 @@ namespace ReceptsAPI.Repository
 
         public bool Delete(int id)
         {
-            var recept = _context.Recepts.FirstOrDefault(x => x.Id == id);
+            var stage = _context.Stages.FirstOrDefault(x => x.Id == id);
 
-            if(recept != null)
+            if (stage != null)
                 return false;
 
-            _context.Recepts.Remove(recept);
+            _context.Stages.Remove(stage);
 
             try
             {
@@ -46,20 +47,19 @@ namespace ReceptsAPI.Repository
             return true;
         }
 
-        public List<Recept> GetAll()
+        public List<Stage> GetAll()
         {
-            return _context.Recepts.ToList();
+            return _context.Stages.ToList();
         }
 
-        public Recept? GetById(int Id)
+        public Stage? GetById(int Id)
         {
-            return _context.Recepts.Where(recept => recept.Id == Id).FirstOrDefault();
+            return _context.Stages.Where(stage => stage.Id == Id).FirstOrDefault();
         }
 
-       
-        public bool Update(Recept item)
+        public bool Update(Stage item)
         {
-            _context.Recepts.Update(item);
+            _context.Stages.Update(item);
 
             try
             {

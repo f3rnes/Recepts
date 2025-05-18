@@ -1,6 +1,7 @@
 ﻿using ReceptsAPI.Entity;
+using ReceptsAPI.Repository.Interface;
 
-namespace ReceptsAPI.Repository
+namespace ReceptsAPI.Repository.Repositories
 {
     public class CommentRepository : ICommentRepository
     {

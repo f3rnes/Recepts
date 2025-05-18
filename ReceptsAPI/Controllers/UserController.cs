@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ReceptsAPI.Entity;
-using ReceptsAPI.Repository;
 using System.Data;
 using ReceptsAPI.Contacts.UsersContacts.CreateUsers;
+using ReceptsAPI.Repository.Interface;
 
 
 namespace ReceptsAPI.Controllers
