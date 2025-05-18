@@ -1,7 +1,5 @@
 ﻿namespace ReceptsAPI.Contacts.StagesContacts.GetStages
 {
-    public class GetStagesResponse
-    {
-
-    }
+    public record GetStagesResponse(int id, int ReceptId, int StageNumber, string? Photo, string Decription);
+  
 }

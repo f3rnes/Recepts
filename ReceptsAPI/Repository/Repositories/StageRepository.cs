@@ -11,7 +11,7 @@ namespace ReceptsAPI.Repository.Repositories
             _context = context;
         }
 
-        public int? Create(Stage item)
+        public int? Create(Stage item) //
         {
             _context.Stages.Add(item);
 
@@ -27,7 +27,7 @@ namespace ReceptsAPI.Repository.Repositories
             return item.Id;
         }
 
-        public bool Delete(int id)
+        public bool Delete(int id)//
         {
             var stage = _context.Stages.FirstOrDefault(x => x.Id == id);
 
@@ -47,7 +47,7 @@ namespace ReceptsAPI.Repository.Repositories
             return true;
         }
 
-        public List<Stage> GetAll()
+        public List<Stage> GetAll()//
         {
             return _context.Stages.ToList();
         }
@@ -57,7 +57,7 @@ namespace ReceptsAPI.Repository.Repositories
             return _context.Stages.Where(stage => stage.Id == Id).FirstOrDefault();
         }
 
-        public bool Update(Stage item)
+        public bool Update(Stage item)//
         {
             _context.Stages.Update(item);
 
